@@ -1,0 +1,275 @@
+html {
+  font-size: 62.5%;
+}
+
+.ActivityPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10rem;
+  margin-top: 5rem;
+  width: 100vw;
+}
+
+.activity-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Add Activity Form*/
+
+.activity-form {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  align-items: flex-start;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.activity-form legend {
+  text-align: center;
+  color: #f68a3c;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.activity-form select,
+.activity-form input {
+  font-size: 1.5rem;
+  margin-left: 1rem;
+  color: #3c3b3ba0;
+  padding: 0.2rem;
+  background: none;
+  border: 0.1rem solid #3c3b3ba0;
+  width: fit-content;
+}
+
+.activity-form label {
+  color: #3c3b3ba0;
+  font-size: 1.75rem;
+}
+
+.calories-burned {
+  font-size: 1.25rem;
+  color: #3c3b3ba0;
+}
+
+.submit-button {
+  align-self: flex-end;
+  padding: 0.5rem;
+}
+
+/* Activity display */
+
+.activity-log-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  border: 0.2rem solid #d59ce8;
+  padding: 2rem;
+  max-width: 75%;
+  border-radius: 1.5rem;
+  background-color: #f5f7fa;
+}
+
+.activity-dashboard h2 {
+  font-size: 5rem;
+  font-weight: 500;
+  color: #f68a3c;
+}
+
+.activity-content {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+}
+
+.activity-log {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 2rem;
+}
+
+.activity-scroll {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: auto;
+  gap: 1.5rem;
+  max-width: fit-content;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: 25rem;
+  height: 10rem;
+  position: relative;
+  gap: 1rem;
+  background-color: #9bed98cb;
+  border-radius: 1rem;
+}
+
+.activity-item p {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  color: rgb(75, 69, 69);
+}
+
+.activity-image {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 1rem;
+}
+
+.no-activity-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-activity-message p {
+  font-size: 2rem;
+  color: #f68a3c;
+}
+
+.delete-button {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+}
+
+/* Add Activity Button*/
+
+.modal-button {
+  background-color: #fa8597;
+  color: #fff;
+  padding: 1rem 0;
+  cursor: pointer;
+  border: none;
+  border-radius: 2rem;
+  font-size: 1.5rem;
+  width: 10rem;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(5, 5, 5, 0.605);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.activity-form-modal {
+  display: flex;
+  flex-direction: column;
+  background-color: #dfe1e3;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px #d59ce8;
+}
+
+/* Day Picker*/
+.activity-calendar {
+  margin-top: 0;
+}
+
+.selected-date {
+  font-size: 1.75rem;
+  color: #8271e5;
+  text-align: center;
+}
+
+/*-------------------------Media Queries------------------------*/
+
+@media (max-width: 790px) {
+  body {
+    min-width: 100vw;
+  }
+
+  .activity-log-container {
+    max-width: 90%;
+    height: fit-content;
+    padding: 0;
+  }
+
+  .activity-scroll {
+    height: 90%;
+    gap: 0.5rem;
+  }
+
+  .activity-content {
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 414px) {
+  .activity-dashboard h2 {
+    font-size: 3rem;
+  }
+  .activity-log-container {
+    max-width: 100%;
+    padding: 3.25rem;
+    height: fit-content;
+  }
+
+  .activity-content {
+    flex-direction: column;
+    padding: 0;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .activity-scroll {
+    min-height: 0;
+    max-height: 40rem;
+    margin-top: 0;
+    overflow-y: auto;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+
+  .DateFilter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .activity-form-modal {
+    width: 75%;
+  }
+
+  .calories-burned {
+    line-height: normal;
+  }
+
+  .activity-form select,
+  .activity-form input {
+    font-size: 1.25rem;
+  }
+}

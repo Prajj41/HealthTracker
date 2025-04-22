@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.ProgressVisualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 4rem;
+}
+
+
+.container-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.weekly-progress-container,
+.weekly-goals-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  align-items: center;
+  /* justify-content: flex-start; */
+  padding: 2rem;
+  background-color: #f5f7fa;
+  border: 0.2rem solid #d59ce8;
+  border-radius: 1.5rem;
+  height: fit-content;
+}
+
+.WeeklyGoals {
+  width: 50%;
+}
+
+.date-text,
+.button-text {
+  font-size: 15px;
+  color: #8271e5;
+  padding: 0.5rem;
+}
+
+.Select {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.custom-select {
+  width:100%;
+  margin-top: 2vh; 
+  font-size: 1.5rem;
+}
+
+.custom-select p {
+  text-align: center;
+  color: #8271e5;
+  font-size: 2rem;
+  margin: 1vh;
+}
+
+.WeeklyGoals form {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f5f7fa;
+}
+
+.WeeklyGoals label {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  color: #8271e5;
+}
+
+.WeeklyGoals input {
+  color: #f68a3c;
+  font-weight: bolder;
+  width: 55%;
+  padding: 10px;
+  margin-bottom: 4px;
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  box-sizing: content-box;
+  text-align: center;
+}
+
+.WeeklyGoals button {
+  background-color: #fa8597;
+  color: white;
+  padding: 5px;
+  font-size: 15px;
+  border: #f68a3c;
+  border-radius: 4px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/*---------------Media Queries------------------*/
+
+@media (max-width: 1024px) {
+  .container-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 414px) {
+  .container-wrapper {
+    width: 80%;
+  }
+
+  .weekly-progress-container,
+  .weekly-goals-container {
+    width: 100%;
+  }
+
+  .WeeklyGoals {
+    width: 100%;
+    margin-right: 4rem;
+  }
+}

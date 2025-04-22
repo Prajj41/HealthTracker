@@ -1,0 +1,58 @@
+/* RenderLineChart.css */
+
+/* Line Chart Container */
+.line-chart-container {
+  text-align: center;
+  margin: 20px;
+  padding: 20px;
+  background-color: rgb(63, 3, 74);
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+  margin-top: auto;
+  width: 90%;
+}
+
+.line-chart-container:hover {
+  transform: scale(1.02);
+}
+
+/* Chart Title */
+.chart-title {
+  color: #f0ebeb;
+  font-size: 36px;
+  margin-bottom: 20px;
+  animation: fadeInUp 1s ease-in-out;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*--------Media Queries-----------*/
+
+@media (max-width: 1024px) {
+  .line-chart-container {
+    width: 50%;
+  }
+}
+
+@media (max-width: 414px) {
+  .line-chart-container {
+    width: 22%;
+  }
+
+  .chart-title {
+    font-size: 24px;
+  }
+}

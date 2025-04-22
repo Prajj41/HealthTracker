@@ -1,0 +1,92 @@
+form {
+  margin: 0;
+  padding: 0;
+  background: #f78a51;
+  padding: 20px;
+  border-radius: 20px;
+  margin-top: 20px;
+  margin-bottom: 100px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: 200;
+  color: #bcf6a3;
+  margin-top: -1px;
+}
+
+label {
+  font-size: 15px;
+  color: #FFF;
+}
+
+input {
+  border: 0;
+  background-color: transparent;
+  color: #FFF;
+}
+
+.contentForm {
+  font-family: 'Quicksand', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+#dateContent {
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+  margin-top: -10px;
+}
+
+#date {
+  color: #eee5e5;
+  border: solid #ea666a 1px;
+  width: 200px;
+}
+
+#cereal, #vegetable, #fruit, #dairy, #meat, #oil, #sugar {
+  display: flex;
+  column-gap: 10px;
+}
+
+#quantity {
+  width: 30px;
+}
+
+.contentForm input {
+  width: 280px;
+  height: 28px;
+}
+
+.contentForm select {
+  width: 260px;
+  height: 32px;
+  border: 0;
+  background-color: transparent;
+  color: #292626;
+  border: solid #ea666a 1px;
+}
+
+.contentForm button {
+  width: 308px;
+  height: 30px;
+}
+
+.portion {
+  width: 28px;
+}
+
+.submit {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 800;
+  color: black;
+  background-color: #bcf6a3;
+  border: 0;
+  width: 100px !important;
+  border-radius: 20px;
+}
