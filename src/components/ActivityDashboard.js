@@ -158,11 +158,6 @@ function ActivityDashboard({ userInfo }) {
         </div>
       </div>
 
-      <ReusableModalButton
-        buttonText="Add Activity"
-        onModalButtonClick={openModal}
-      />
-
       {isModalOpen && (
         <div className="overlay">
           <div className="activity-form-modal">

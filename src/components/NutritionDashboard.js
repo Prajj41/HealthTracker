@@ -56,14 +56,25 @@ function addNutrition(newNutrition) {
  in the `nutrition` array, it creates a new object with properties `name`, `totalGramsIngested`,
  `totalCalories`, `totalProtein`, `totalFat`, and `totalCarbohydrates`. The values for these
  properties are extracted from the corresponding properties in each item of the `nutrition` array. */
-  const data = nutrition.map((item) => ({
-    name: item.date,
+ const data = nutrition
+  .filter(item => {
+    const dateValue = new Date(item.date);
+    return (
+      item.date &&
+      !isNaN(dateValue.getTime()) &&
+      dateValue.getFullYear() >= 2023 && dateValue.getFullYear() <= 2030
+    );
+  })
+  .map((item) => ({
+    name: new Date(item.date).toISOString().split('T')[0],
     totalGramsIngested: item.total.totalPortion,
     totalCalories: item.total.totalCalories,
     totalProtein: item.total.totalProtein,
     totalFat: item.total.totalFat,
     totalCarbohydrates: item.total.totalCarbohydrates,
-  }));
+  }))
+  .sort((a, b) => new Date(a.name) - new Date(b.name));  // <-- Sort added here
+
 
   /* The `return` statement in the `NutritionDashboard` component is returning JSX code that will be
   rendered as HTML by React. */

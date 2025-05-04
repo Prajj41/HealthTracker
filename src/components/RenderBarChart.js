@@ -38,7 +38,7 @@ const CustomTooltip = ({ active, payload }) => {
     // Render tooltip content with data
     return (
       <div className="custom-tooltip" style={tooltipStyle}>
-        <p style={{ color: 'black' }}>{`Day: ${data.day}`}</p>
+        <p style={{ color: 'black' }}>{`Day: ${data.displayDate}`}</p>
         <p style={{ color: '#FFD700' }}>{`Total Sugar: ${data.totalSugar.toFixed(2)}`}</p>
         <p style={{ color: '#32CD32' }}>{`Total Protein: ${data.totalProtein.toFixed(2)}`}</p>
         <p style={{ color: '#FF6347' }}>{`Total Fat: ${data.totalFat.toFixed(2)}`}</p>
@@ -50,11 +50,38 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
+// Helper function to check if a date is valid
+const isValidDate = (dateString) => {
+  // First, check if dateString is actually provided
+  if (!dateString) return false;
+  
+  // Try to create a Date object
+  const date = new Date(dateString);
+  
+  // Check if date is valid and within a reasonable range (2000-2030)
+  if (isNaN(date.getTime())) return false;
+  
+  const year = date.getFullYear();
+  if (year < 2000 || year > 2030) return false;
+  
+  // Reject specific invalid dates we've observed
+  if (dateString.includes('7777') || dateString.includes('0001')) return false;
+  
+  return true;
+};
+
+// Helper function to format date consistently
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+};
+
 // Main component for rendering the line chart
 const RenderBarChart = () => {
   // State for storing nutrition data and loading status
   const [nutritionData, setNutritionData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Fetch data from the mock API when the component mounts
   useEffect(() => {
@@ -62,11 +89,20 @@ const RenderBarChart = () => {
       try {
         // Make an API request to get nutrition data
         const response = await axios.get('https://654d199b77200d6ba859fcf7.mockapi.io/nutrition');
-        setNutritionData(response.data);
+        
+        // Log the raw data to help with debugging
+        console.log('Raw API data:', response.data);
+        
+        // Filter out entries with invalid dates before setting state
+        const validData = response.data.filter(entry => isValidDate(entry.date));
+        console.log('Filtered data (valid dates only):', validData);
+        
+        setNutritionData(validData);
         setLoading(false);
       } catch (error) {
         // Handle errors during API request
         console.error('Error fetching data:', error);
+        setError('Failed to fetch nutrition data. Please try again later.');
         setLoading(false);
       }
     };
@@ -75,33 +111,59 @@ const RenderBarChart = () => {
     fetchData();
   }, []);
 
-  // Function to transform raw data into the format needed for the chart
   const extractChartData = () => {
+    if (!nutritionData.length) return [];
+    
     const dateMap = {};
-
-    // Process each entry in the nutrition data
+  
     nutritionData.forEach((entry) => {
-      const date = entry.date;
-      // If date does not exist in the map, initialize with default values
-      if (!dateMap[date]) {
-        dateMap[date] = {
-          day: date,
+      // Skip entries with invalid dates (should be already filtered, but adding as extra precaution)
+      if (!isValidDate(entry.date)) return;
+      
+      const displayDate = formatDate(entry.date);
+      
+      // Initialize if not exists
+      if (!dateMap[displayDate]) {
+        dateMap[displayDate] = {
+          day: displayDate,
+          displayDate,
+          sortDate: new Date(entry.date).getTime(), // Use timestamp for sorting
           totalSugar: 0,
           totalProtein: 0,
           totalFat: 0,
           totalCarbohydrates: 0,
         };
       }
-
-      // Accumulate values for each nutrient
-      dateMap[date].totalSugar += parseFloat(entry.total.totalCarbohydrates);
-      dateMap[date].totalProtein += parseFloat(entry.total.totalProtein);
-      dateMap[date].totalFat += parseFloat(entry.total.totalFat);
-      dateMap[date].totalCarbohydrates += parseFloat(entry.total.totalCarbohydrates);
+  
+      // Safe parsing of values with fallbacks to 0
+      const sugar = entry.total?.totalSugar ? 
+        parseFloat(entry.total.totalSugar) || 0 : 0;
+      
+      const protein = entry.total?.totalProtein ? 
+        parseFloat(entry.total.totalProtein) || 0 : 0;
+      
+      const fat = entry.total?.totalFat ? 
+        parseFloat(entry.total.totalFat) || 0 : 0;
+      
+      const carbs = entry.total?.totalCarbohydrates ? 
+        parseFloat(entry.total.totalCarbohydrates) || 0 : 0;
+      
+      // Add values to the accumulator
+      dateMap[displayDate].totalSugar += sugar;
+      dateMap[displayDate].totalProtein += protein;
+      dateMap[displayDate].totalFat += fat;
+      dateMap[displayDate].totalCarbohydrates += carbs;
     });
-
-    // Convert the map values to an array of objects
-    return Object.values(dateMap);
+  
+    // Convert to array and sort by date
+    const chartData = Object.values(dateMap);
+    chartData.sort((a, b) => a.sortDate - b.sortDate);
+    
+    // Log the processed chart data for debugging
+    console.log('Processed chart data:', chartData);
+    
+    // Remove the sortDate property as it's no longer needed for display
+    return chartData.map(({ sortDate, ...rest }) => rest);
   };
 
   // Render the main component
@@ -110,9 +172,15 @@ const RenderBarChart = () => {
       {/* Component to display motivational words */}
       <MotivationalWordsCloud />
       <h2 className="chart-title">Nutrition Tracker</h2>
+      
+      {/* Display error message if there is one */}
+      {error && <p className="error-message">{error}</p>}
+      
       {/* Display loading message while fetching data */}
       {loading ? (
         <p>Loading...</p>
+      ) : nutritionData.length === 0 ? (
+        <p>No valid nutrition data available. Please check your data source.</p>
       ) : (
         // Responsive container for the line chart
         <ResponsiveContainer width="90%" height={400}>

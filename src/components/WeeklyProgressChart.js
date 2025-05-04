@@ -25,9 +25,9 @@ function WeeklyProgressChart({ currentWeek, originalApiData }) {
       const doesWeekStartMatchCurrentWeek = isSameDay(weekStart, currentWeek);
       if (doesWeekStartMatchCurrentWeek) {
         const weekEnd = endOfWeek(activityDate);
-        const weekRange = `${format(weekStart, 'MMM d')} - ${format(
+        const weekRange = `${format(weekStart, 'MM d')} - ${format(
           weekEnd,
-          'MMM d'
+          'MM d'
         )}`;
         weeklyTotals[weekRange] =
           weeklyTotals[weekRange] ||

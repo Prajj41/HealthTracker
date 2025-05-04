@@ -57,7 +57,7 @@ function App() {
       <div className="container-wrapper">
         <div className="weekly-progress-container">
           <h1 style={{ color: '#f68a3c', fontSize: '3rem' }}>
-            Progress Dashboard
+            Progress
           </h1>
           <WeeklyProgressChart
             currentWeek={currentWeek}

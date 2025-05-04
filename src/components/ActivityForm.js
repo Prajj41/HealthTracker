@@ -7,70 +7,79 @@ function ActivityForm({
   onActivityTypeChange,
 }) {
   const handleInputChange = (e) => {
-    e.preventDefault();
     const { name, value, type } = e.target;
     let processedValue = value;
+
     if (type === 'number') {
-      // Round the duration to the nearest integer, so user can't input decimal number
-      processedValue = value !== '' ? Math.round(value) : null;
+      processedValue = value !== '' ? Math.round(value) : '';
     }
 
     onFormChange(name, processedValue);
   };
 
+  const handleActivityChange = (e) => {
+    const selectedValue = e.target.value;
+    const selected = activityOptions.find(
+      (option) => option.activity === selectedValue
+    );
+    onActivityTypeChange(selected || { activity: '', intensity: '' });
+  };
+
   return (
     <form className="activity-form" onSubmit={onFormSubmit}>
-      <legend>Activity Log</legend>
-      <label>
-        Date:
-        <input
-          type="date"
-          name="date"
-          value={activityInput.date}
-          onChange={handleInputChange}
-        />
-      </label>
+      <fieldset>
+        <legend>Activity Log</legend>
 
-      <label>
-        Activity:
-        <select
-          name="type"
-          value={selectedActivity.activity}
-          onChange={(e) => {
-            const selected = activityOptions.find(
-              (option) => option.activity === e.target.value
-            );
-            onActivityTypeChange(selected);
-          }}
-        >
-          <option value="">Select an activity</option>
-          {activityOptions.map((option) => (
-            <option key={option.activity} value={option.activity}>
-              {option.activity}
-            </option>
-          ))}
-        </select>
-      </label>
+        <label>
+          Date:
+          <input
+            type="date"
+            name="date"
+            value={activityInput.date}
+            onChange={handleInputChange}
+            required
+          />
+        </label>
 
-      <label>Intensity: {selectedActivity.intensity}</label>
+        <label>
+          Activity:
+          <select
+            name="type"
+            value={selectedActivity.activity || ''}
+            onChange={handleActivityChange}
+            required
+          >
+            <option value="">Select an activity</option>
+            {activityOptions.map((option) => (
+              <option key={option.activity} value={option.activity}>
+                {option.activity}
+              </option>
+            ))}
+          </select>
+        </label>
 
-      <label>
-        Duration (minutes):
-        <input
-          type="number"
-          name="duration"
-          value={activityInput.duration}
-          onChange={handleInputChange}
-        />
-      </label>
+        <label>Intensity: {selectedActivity.intensity || 'N/A'}</label>
 
-      <p className="calories-burned">
-        Calories burned will be automatically calculated once you submit.
-      </p>
+        <label>
+          Duration (minutes):
+          <input
+            type="number"
+            name="duration"
+            min="1"
+            value={activityInput.duration}
+            onChange={handleInputChange}
+            required
+          />
+        </label>
 
-      <button className="submit-button" type="submit">
-        Submit
-      </button>
+        <p className="calories-burned">
+          Calories burned will be automatically calculated once you submit.
+        </p>
+
+        <button className="submit-button" type="submit">
+          Submit
+        </button>
+      </fieldset>
     </form>
   );
 }

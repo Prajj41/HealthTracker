@@ -4,11 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import '../css/addNutritionForm.css';
 import { foodDataMap } from '../food.js';
 
-/* The above code is defining a functional component called `AddNutritionForm` that takes a prop called
-`addNutrition`. Inside the component, it is using the `useForm` hook from a library (possibly
-`react-hook-form`) to handle form submission and validation. */
 function AddNutritionForm({ addNutrition }) {
-  // eslint-disable-next-line no-unused-vars
+
   const { handleSubmit, register, reset } = useForm('');
 
   const onSubmit = handleSubmit((data) => {
@@ -28,7 +25,6 @@ function AddNutritionForm({ addNutrition }) {
       bread: foodDataMap.bread,
       wholemealBread: foodDataMap.wholemealBread,
       cookedCorn: foodDataMap.cookedCorn,
-      cookedPotato: foodDataMap.cookedPotato,
       cornFlakes: foodDataMap.cornFlakes,
     };
 
@@ -324,7 +320,6 @@ data for. It can be any valid value that represents a type of food, such as "piz
           <option value="bread">Bread</option>
           <option value="wholemealBread">Wholemeal Bread</option>
           <option value="cookedCorn">Cooked Corn</option>
-          <option value="cookedPotato">Cooked Potato</option>
           <option value="cornFlakes">Corn Flakes</option>
         </select>
         <input
@@ -438,7 +433,6 @@ data for. It can be any valid value that represents a type of food, such as "piz
           <option value="shrimp">Shrimp</option>
           <option value="oysters">Oysters</option>
           <option value="clams">Clams</option>
-          <option value="lentils">Lentils</option>
         </select>
         <input
           type="number"
@@ -456,19 +450,13 @@ data for. It can be any valid value that represents a type of food, such as "piz
           <option value="soyOil">Soy Oil</option>
           <option value="oliveOil">Olive Oil</option>
           <option value="lard">Lard</option>
-          <option value="vegetableShortening">Vegetable Shortening</option>
+          <option value="vegetable oil">Vegetable Oil</option>
           <option value="butter">Butter</option>
           <option value="margarine">Margarine</option>
-          <option value="mayonnaise">Mayonnaise</option>
-          <option value="bacon">Bacon</option>
-          <option value="poultryPate">Poultry Pate</option>
-          <option value="almonds">Almonds</option>
-          <option value="saltyAlmonds">Salty Almonds</option>
-          <option value="peanut">Peanut</option>
-          <option value="saltyPeanut">Salty Peanut</option>
-          <option value="nut">Nuts</option>
-          <option value="pistachio">Pistachio</option>
-          <option value="avocado">Avocado</option>
+          <option value="safflower oil">Safflower oil</option>
+          <option value="soybean oil">Soybean oil</option>
+          <option value="Ghee">Ghee</option>
+          <option value="Coconut Oil">Coconut oil</option>
         </select>
         <input
           type="number"

@@ -4,9 +4,6 @@ import { Chart } from 'react-google-charts';
 import { startOfWeek, isSameDay } from 'date-fns';
 import Select from 'react-select';
 import activityOptions from '../data/ActivityOptions';
-import { myAPIKey } from '../services/config';
-const GoalAPI = `https://${myAPIKey}.mockapi.io/weeklygoal`;
-// const MockApiUrl = `https://${myAPIKey}.mockapi.io/activities`;
 
 function WeeklyGoals({ currentWeek, activityProgressApiData }) {
   const [durationGoal, setDurationGoal] = useState(0);
@@ -14,7 +11,6 @@ function WeeklyGoals({ currentWeek, activityProgressApiData }) {
   const [weeklyGoals, setWeeklyGoals] = useState([]);
   const [weeklyGoalsChartData, setWeeklyGoalsChartData] = useState([]);
 
-  // updated the options to pull the data from Novita's activityOptions component so its dynamic
   const options = activityOptions.map((option) => ({
     value: option.activity,
     label: option.activity,
@@ -26,53 +22,29 @@ function WeeklyGoals({ currentWeek, activityProgressApiData }) {
       progress: {},
     };
 
-    // Loop through each entry in the weekly goals api array
     weeklyGoals.forEach((weeklyGoal) => {
       const activityDate = new Date(weeklyGoal.date);
       const weekStart = startOfWeek(activityDate);
       const doesWeekStartMatchCurrentWeek = isSameDay(weekStart, currentWeek);
 
       if (doesWeekStartMatchCurrentWeek) {
-        const matchingWeeklyGoalsActivity = activityOptions.find(
-          (option) => option.activity === weeklyGoal.activity
-        ); // added this line to so we can find the corresponding activity object
-        if (matchingWeeklyGoalsActivity) {
-          // Update the weekly goal total for the matched activity
-          if (weeklyTotals.weeklyGoal[weeklyGoal.activity] === undefined) {
-            weeklyTotals.weeklyGoal[weeklyGoal.activity] = 0;
-          }
-          weeklyTotals.weeklyGoal[matchingWeeklyGoalsActivity.activity] +=
-            weeklyGoal.duration;
-          // weeklyTotals.weeklyGoal[weeklyGoal.activity] += weeklyGoal.duration;
+        if (weeklyTotals.weeklyGoal[weeklyGoal.activity] === undefined) {
+          weeklyTotals.weeklyGoal[weeklyGoal.activity] = 0;
         }
+        weeklyTotals.weeklyGoal[weeklyGoal.activity] += weeklyGoal.duration;
       }
     });
 
-    // Loop through each entry in the activity log api array
     activityProgressApiData.forEach((activity) => {
       const activityDate = new Date(activity.date);
       const weekStart = startOfWeek(activityDate);
       const doesWeekStartMatchCurrentWeek = isSameDay(weekStart, currentWeek);
 
       if (doesWeekStartMatchCurrentWeek) {
-        const matchingActivityProgressFromApiData = activityOptions.find(
-          (option) => option.activity === activity.activity
-        ); // same concept as line 40
-        if (matchingActivityProgressFromApiData) {
-          // Update the progress total for the matched activity
-          if (
-            weeklyTotals.progress[
-              matchingActivityProgressFromApiData.activity
-            ] === undefined
-          ) {
-            weeklyTotals.progress[
-              matchingActivityProgressFromApiData.activity
-            ] = 0;
-          }
-          weeklyTotals.progress[matchingActivityProgressFromApiData.activity] +=
-            activity.duration;
-          // weeklyTotals.progress[activity.activity] += activity.duration;
+        if (weeklyTotals.progress[activity.activity] === undefined) {
+          weeklyTotals.progress[activity.activity] = 0;
         }
+        weeklyTotals.progress[activity.activity] += activity.duration;
       }
     });
 
@@ -80,18 +52,12 @@ function WeeklyGoals({ currentWeek, activityProgressApiData }) {
 
     for (const activity in weeklyTotals.weeklyGoal) {
       const pieChartTotals = [['Task', 'Value']];
-      pieChartTotals.push([
-        `${activity} Goal`,
-        weeklyTotals.weeklyGoal[activity],
-      ]);
+      pieChartTotals.push([`${activity} Goal`, weeklyTotals.weeklyGoal[activity]]);
       if (
         weeklyTotals.progress !== undefined &&
         weeklyTotals.progress[activity] !== undefined
       ) {
-        pieChartTotals.push([
-          `${activity} Progress`,
-          weeklyTotals.progress[activity],
-        ]);
+        pieChartTotals.push([`${activity} Progress`, weeklyTotals.progress[activity]]);
       }
       const dataForPieCharts = {
         chartTitle: `${activity} Goals`,
@@ -105,72 +71,46 @@ function WeeklyGoals({ currentWeek, activityProgressApiData }) {
   const handleInput = (e) => {
     setDurationGoal(parseInt(e.target.value));
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    if (!selectedActivity.label) {
+      alert("Please select an activity");
+      return;
+    }
+  
     const goal = {
-      date: currentWeek,
+      date: new Date().toISOString().split('T')[0],
       activity: selectedActivity.label,
       duration: durationGoal,
     };
-    handleWeeklyGoals(goal);
-  };
+  
+    const updatedGoals = [...weeklyGoals, goal];
+    setWeeklyGoals(updatedGoals);
+    localStorage.setItem('weeklyGoals', JSON.stringify(updatedGoals));
+    setDurationGoal(0);
+    setSelectedActivity({});
+  };  
 
   const handleChange = (selectedOption) => {
     setSelectedActivity(selectedOption);
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch(GoalAPI);
-      const data = await response.json();
-      setWeeklyGoals(data);
-      // const updatedChartInfo = calculateWeeklyGoalsChartData(data, currentWeek);
-      // console.log("updated chart info", updatedChartInfo)
-      // setWeeklyGoalsChartData(updatedChartInfo);
-    } catch (error) {
-      console.error('Error fetching API data:', error);
-    }
+  const fetchGoalsFromLocalStorage = () => {
+    const storedGoals = JSON.parse(localStorage.getItem('weeklyGoals')) || [];
+    setWeeklyGoals(storedGoals);
   };
 
-  //GET
   useEffect(() => {
-    fetchData(); //moved the const fetchData outside of this useEffect so that i can call the fetchData in the "post", that way when the use saves their goal, the charts automatically populate
-    // removed dependency array to only fetch data once
+    fetchGoalsFromLocalStorage();
   }, []);
 
   useEffect(() => {
     if (weeklyGoals.length > 0) {
-      // if array it empty, it wont update the chart
       const updatedChartInfo = calculateWeeklyPieChart();
       setWeeklyGoalsChartData(updatedChartInfo);
-    } else {
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weeklyGoals, currentWeek]);
-
-  //POST
-  const handleWeeklyGoals = async (durationGoalWeek) => {
-    try {
-      const response = await fetch(GoalAPI, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(durationGoalWeek),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to add goal');
-      }
-
-      const data = await response.json();
-      fetchData();
-      return data;
-    } catch (error) {
-      console.error('Error adding goal:', error);
-    }
-  };
 
   const customStyles = {
     menu: (provided) => ({
@@ -184,11 +124,12 @@ function WeeklyGoals({ currentWeek, activityProgressApiData }) {
       <div className="WeeklyGoals">
         <div className="weekly-goals-container">
           <div className="custom-select">
-            <p> Select An Activity</p>
+            <p>Select An Activity</p>
             <Select
               options={options}
               onChange={handleChange}
               styles={customStyles}
+              value={selectedActivity}
             />
           </div>
 
@@ -199,6 +140,7 @@ function WeeklyGoals({ currentWeek, activityProgressApiData }) {
               type="number"
               value={durationGoal}
               onChange={handleInput}
+              min="1"
             />
             <br />
             <button type="submit">Save Your Goal</button>
