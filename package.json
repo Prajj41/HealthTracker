@@ -23,7 +23,6 @@
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.16",
     "lightweight-charts": "^4.1.1",
-    "mysql": "^2.18.1",
     "react": "^18.2.0",
     "react-calendar": "^4.7.0",
     "react-day-picker": "^8.9.1",
