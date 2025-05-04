@@ -4,15 +4,11 @@ import 'react-day-picker/dist/style.css';
 import '../css/Activity.css';
 
 function ActivityDateFilter({ selectedDate, onDayClick }) {
-  let footer = (
-    <p className="pick">
-      Click on a date to see activities logged for that day.
-    </p>
-  );
+  let footerText = 'Click on a date to see activities logged for that day.';
   let date;
   if (selectedDate) {
     date = format(selectedDate, 'PPPP');
-    footer = <p></p>;
+    footerText = '';
   } else {
     date = format(new Date(), 'PPPP');
   }
@@ -23,14 +19,12 @@ function ActivityDateFilter({ selectedDate, onDayClick }) {
       <DayPicker
         showOutsideDays
         fixedWeeks
-        className="activity-calendar"
         mode="single"
         selected={selectedDate}
-        onSelect={(date) => {
-          onDayClick(date);
-        }}
-        footer={footer}
+        onSelect={(date) => onDayClick(date)}
+        className="activity-calendar"
       />
+      {footerText && <p className="pick">{footerText}</p>}
     </div>
   );
 }

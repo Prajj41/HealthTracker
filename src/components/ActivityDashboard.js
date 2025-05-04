@@ -2,7 +2,6 @@ import '../css/Activity.css';
 import { useState, useEffect } from 'react';
 import ActivityLog from './ActivityLog';
 import activityService from '../services/activityService';
-import activityOptions from '../data/ActivityOptions';
 import ActivityDateFilter from './ActivityDateFilter';
 import getStandardizedDate from '../utils/getStandardizedDate';
 
@@ -13,29 +12,12 @@ function ActivityDashboard({ userInfo }) {
   // State to track activities logged
   const [activities, setActivities] = useState([]);
 
-  // State to track selected activity and intensity
-  const [selectedActivity, setSelectedActivity] = useState({
-    activity: '',
-    intensity: '',
-    MET: '',
-  });
-
-  // Sorting activity options alphabetically
-  const sortedActivityOptions = [...activityOptions].sort((a, b) =>
-    a.activity.localeCompare(b.activity)
-  );
-
   // To initialize Activity Log to display today's activity
   useEffect(() => {
     activityService.getActivities().then((data) => {
       setActivities(Array.isArray(data) ? data : []);
     });
   }, []);
-
-  // Handle change in activity dropdown selection
-  const handleActivityTypeChange = (selectedActivity) => {
-    setSelectedActivity(selectedActivity);
-  };
 
   // To filter activities based on the selected date
   const filteredActivities = activities.filter(

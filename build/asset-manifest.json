@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.38f27f61.css",
+    "main.js": "/static/js/main.b4dec1d4.js",
+    "static/media/biking.jpg": "/static/media/biking.e4ed6135b624f0dcda07.jpg",
+    "static/media/charting.jpg": "/static/media/charting.bf77e447aff1200924a0.jpg",
+    "static/media/nutrition.jpg": "/static/media/nutrition.654dcc3699b211721da0.jpg",
+    "index.html": "/index.html",
+    "main.38f27f61.css.map": "/static/css/main.38f27f61.css.map",
+    "main.b4dec1d4.js.map": "/static/js/main.b4dec1d4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.38f27f61.css",
+    "static/js/main.b4dec1d4.js"
+  ]
+}
